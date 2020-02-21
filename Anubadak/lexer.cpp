@@ -1,5 +1,7 @@
+#include <iostream>
 #include <stack>
 #include "lexer.h"
+
 
 using namespace lexer;
 
@@ -7,7 +9,7 @@ Lexer::Lexer(std::string& program)
 {
 	int currentIndex = 0;
 	Token tempTok;
-	while (currentIndex < program.length())
+	while (currentIndex <= program.length())
 	{
 		tempTok = generateToken(program, currentIndex);
 		tokens.push_back(tempTok);
@@ -17,29 +19,72 @@ Lexer::Lexer(std::string& program)
 
 Token Lexer::nextToken()
 {
-		return tokens[currentToken++];
+	if (_currentTokenNumber < tokens.size())
+		return tokens[_currentTokenNumber++];
+	else {
+		std::string error = "Final token surpassed.";
+		return Token(31, error);
+	}
 
 }
 Token Lexer::generateToken(std::string& program, int& currentIndex)
 {
-	while (program[currentIndex] == ' ')
-		currentIndex++;
-
-	char currentSymbol = program[currentIndex];
-	int currentState = 0;
+	int current_state = 0;
+	std::stack<int> state_stack;
+	char current_symbol;
 	std::string lexeme;
-	int finalState;
 
-	while (currentState != e)
-	{
-		finalState = currentState;
-		lexeme += currentSymbol;
+	// Push 'BAD' state on the stack
+	state_stack.push(-1);
+
+	// Ignore whitespaces or newlines in front of lexeme
+	while (currentIndex < program.length() &&
+		(program[currentIndex] == ' ' || program[currentIndex] == '\n'))
 		currentIndex++;
-		currentSymbol = program[currentIndex];
-		currentState = transitionFunction(currentState, currentSymbol);
+
+	// Check if EOF
+	if (currentIndex == program.length()) {
+		lexeme = (char)EOF;
+		currentIndex++;
+		return Token(22, lexeme, getLineNumber(program, currentIndex));
 	}
-	return Token(finalState, lexeme, getLineNumber(program, currentIndex));
-	
+
+	// While current state is not error state
+	while (current_state != e) {
+		current_symbol = program[currentIndex];
+		lexeme += current_symbol;
+
+		// If current state is final, remove previously recorded final states
+		if (isFinal[current_state])
+			while (!state_stack.empty())
+				state_stack.pop();
+
+		// and push current one on the stack
+		state_stack.push(current_state);
+
+		// Go to next state using delta function in DFA
+		current_state = transitionFunction(current_state, current_symbol);
+
+		// Update current index for next iteration
+		currentIndex++;
+	}
+
+	// Rollback loop
+	while (!isFinal[current_state] && current_state != -1) {
+		current_state = state_stack.top();
+		state_stack.pop();
+		lexeme.pop_back();
+		currentIndex--;
+	}
+
+	if (current_state == -1)
+		throw std::runtime_error("Lexical error.");
+
+
+	if (isFinal[current_state])
+		return Token(current_state, std::move(lexeme), getLineNumber(program, currentIndex));
+	else std::cout << "Lexical error on line " << std::endl;
+
 }
 
 int Lexer::transitionFunction(int currentState, char symbol)
@@ -56,7 +101,7 @@ int Lexer::transitionFunction(int currentState, char symbol)
 	case '7':
 	case '8':
 	case '9':
-		return transitions[static_cast <int >(TRANSITION_TYPE::DIGIT)][currentState];
+		return transitions[static_cast <int>(TRANSITION_TYPE::DIGIT)][currentState];
 
 	case '.':
 		return transitions[static_cast <int>(TRANSITION_TYPE::PERIOD)][currentState];
@@ -80,11 +125,11 @@ int Lexer::transitionFunction(int currentState, char symbol)
 	case '_':
 		return transitions[static_cast <int>(TRANSITION_TYPE::UNDERSCORE)][currentState];
 	case '/':
-		return transitions[static_cast <int>(TRANSITION_TYPE::EQUALS)][currentState];
+		return transitions[static_cast <int>(TRANSITION_TYPE::FORWARDSLASH)][currentState];
 	case '\\':
-		return transitions[static_cast <int>(TRANSITION_TYPE::EQUALS)][currentState];
+		return transitions[static_cast <int>(TRANSITION_TYPE::BACKSLASH)][currentState];
 	case '\"':
-		return transitions[static_cast <int>(TRANSITION_TYPE::EQUALS)][currentState];
+		return transitions[static_cast <int>(TRANSITION_TYPE::QUOTATION_MARK)][currentState];
 
 	case ':':
 	case ';':
@@ -116,21 +161,21 @@ int Lexer::transitionFunction(int currentState, char symbol)
 		return transitions[static_cast <int>(TRANSITION_TYPE::OTHER)][currentState];
 
 
-	/*default:
-		auto ascii = (int)symbol;
-		if ((ascii >= 0x61) && (ascii <= 0x7A))
-			return transitions[static_cast <int>(TRANSITION_TYPE::LETTER)][currentState];
-		else
-			return transitions[static_cast <int>(TRANSITION_TYPE::OTHER)][currentState];
-			*/
-	
+		/*default:
+			auto ascii = (int)symbol;
+			if ((ascii >= 0x61) && (ascii <= 0x7A))
+				return transitions[static_cast <int>(TRANSITION_TYPE::LETTER)][currentState];
+			else
+				return transitions[static_cast <int>(TRANSITION_TYPE::OTHER)][currentState];
+				*/
+
 	}
 }
 
-int Lexer::getLineNumber(std::string & program,int currentIndex)
+int Lexer::getLineNumber(std::string& program, int currentIndex)
 {
 	int lineNumber = 0;
-	for (int i= 0; i < currentIndex;i++)
+	for (int i = 0; i < currentIndex; i++)
 	{
 		if (program[i] == '\n')
 			lineNumber++;

@@ -4,23 +4,8 @@
 
 #include "token.h"
 
-
-using namespace lexer;
-
 namespace lexer
 {
-	/*enum class TRANSITION_TYPE
-	{
-		LETTER,
-		DIGIT,
-		OTHER
-	};*/
-
-	/**
- * An enum containing tranistion types.
- * This enum encodes the equivalence classes of admissable transitions in
- * the automaton for the lexer, as described in table 1.1 in the report.
- */
 	enum class TRANSITION_TYPE {
 		DIGIT = 0,
 		PERIOD = 1,
@@ -47,22 +32,14 @@ namespace lexer
 	public:
 		///Lexer class constructor  takes string form of whole program as a input 
 		Lexer(std::string& program);
-		
+
 		///this method is used by the parser to move through the tokens vectors 
 		Token nextToken();
 		std::vector<Token> tokens;
-		
+
 	private:
 		const int e = 23;
 
-		//int isFinal[4] = { 0,1,1,0 };
-
-		//int transitions[3][3] = {
-		//	/*S0  s1   s2*/
-		//	/*LETTER*/ {1,   1,  e },
-		//	/*DIGIT*/  {2,   e,  2 },
-		//	/*OTHER*/  {e,   e,  e },
-		//};
 
 		/**
 			 * Encodes the transition function of the DFA.
@@ -71,6 +48,7 @@ namespace lexer
 			 * \f$=\delta(j, i)\f$.
 			 * @see Lexer::transition_delta(int, char)
 			 */
+		const bool isFinal[24] = { 0,  1,  0,  1,  1,  1,  0,  1,  1,  1,  1,  1,  0,  0,  1,  0,  1,  0,  0,  0,  1,  1,  1, 0 };
 		const int transitions[17][23] = {
 			                      /* S0  S1  S2  S3  S4  S5  S6  S7  S8  S9 S10 S11 S12 S13 S14 S15 S16 S17 S18 S19 S20 S21 S22 */
 			/* DIGIT          */ {   1,  1,  3,  3,  e,  e,  e,  e,  e,  e, 10,  e, 12, 13,  e, 13,  e, 17, 17, 17,  e,  e,  e},
@@ -97,13 +75,13 @@ namespace lexer
 		Token generateToken(std::string& program, int& currentIndex);
 
 		/// given program and current index this method calculate the line number by couunting \n in the program
-		int getLineNumber(std::string &program, int current_index);
+		int getLineNumber(std::string& program, int current_index);
 		///this function behaves as the transition function of the deterministic finite state automata
 		int transitionFunction(int current_state, char symbol);
 
 
 		///to keep track of how far in the tokens vetor we have reached
-		int currentToken;
+		int _currentTokenNumber;
 
 
 	};

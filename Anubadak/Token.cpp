@@ -4,7 +4,7 @@
 using namespace lexer;
 
 Token::Token(int finalState, std::string value, int lineNumber)
-	:type(determineTokenType(finalState,value)),value(value),lineNumber(lineNumber)
+	:type(determineTokenType(finalState, value)), value(value), lineNumber(lineNumber)
 {
 }
 Token::Token() = default;
