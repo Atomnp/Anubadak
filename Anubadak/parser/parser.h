@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ast.h"
-#include "lexer.h"
-#include "token.h"
+#include "../lexer/lexer.h"
+#include "../lexer/token.h"
 #include <vector>
 
 namespace parser
@@ -16,6 +16,14 @@ namespace parser
 		parser::ASTProgramNode* parse_program();
 		parser::ASTStatementNode* parseStatement();
 		parser::ASTDeclarationNode* parseDeclarationStatement();
+		parser::ASTAssignmentNode* parseAssignmentStatement();
+		parser::ASTPrintNode* parsePrintStatement();
+		parser::ASTBlockNode* parseBlock();
+		parser::ASTIfNode* parseIfBlock();
+		parser::ASTReturnNode* parseReturnStatement();
+		parser::ASTWhileNode* parseWhileBlock();
+		parser::ASTFunctionDefinitionNode* parseFunctionDefinition();
+		std::pair<std::string, TYPE>* parseFormalParameter();
 		parser::TYPE parseType();
 		
 

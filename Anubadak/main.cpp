@@ -1,6 +1,6 @@
 #include <iostream>
-#include "lexer.h"
-#include "parser.h"
+#include "lexer/lexer.h"
+#include "parser/parser.h"
 
 int main()
 {
@@ -9,7 +9,7 @@ int main()
 
 
 
-	std::string program=" var x:int = (5+10); ";
+	std::string program="def funcName(): nt {var x:int =0;}";
 	lexer:: Lexer lexer(program);
 	std::cout << "LENGTH OF TOKENS=" << lexer.tokens.size() << std::endl;
 	for (size_t i = 0; i < lexer.tokens.size(); i++)

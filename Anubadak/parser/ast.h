@@ -33,6 +33,8 @@ namespace parser
 		std::vector<ASTNode*> _statements;
 		ASTProgramNode(std::vector<ASTNode*>statements);
 	};
+
+
 	class ASTDeclarationNode :public ASTStatementNode
 	{
 	public:
@@ -44,26 +46,81 @@ namespace parser
 		ASTDeclarationNode(TYPE type, std::string identifier, int lineNumber, ASTExprNode* expression);
 
 	};
+
+
 	class ASTAssignmentNode :public ASTStatementNode
 	{
+	private:
+		std::string _identifier;
+		int _lineNumber;
+		ASTExprNode* _expression;
+	public:
+		ASTAssignmentNode(std::string identifier, int lineNumber, ASTExprNode* expression);
 	};
+
+
 	class ASTPrintNode :public ASTStatementNode
 	{
+	private:
+		int _lineNumber;
+		ASTExprNode* _expression;
+
+	public:
+		ASTPrintNode(int lineNumber, ASTExprNode* expression);
 	};
+
+
 	class ASTReturnNode :public ASTStatementNode
 	{
+		int _lineNumber;
+		ASTExprNode* _expr;
+	public:
+		ASTReturnNode(ASTExprNode * expression, int lineNumber);
 	};
+
+
 	class ASTBlockNode :public ASTStatementNode
 	{
+		std::vector<ASTStatementNode*> _statements;
+		int _lineNumber;
+	public:
+		ASTBlockNode(std::vector<ASTStatementNode*> statements, int lineNumber);
 	};
+
+
 	class ASTIfNode :public ASTStatementNode
 	{
+		int _lineNumber;
+		ASTExprNode* _condition;
+		ASTBlockNode* _ifBlock;
+		ASTBlockNode* _elseBlock;
+	public:
+		ASTIfNode(ASTExprNode *condition, ASTBlockNode * ifBlock , 
+			int lineNumber, ASTBlockNode* elseBlock=nullptr);
 	};
 	class ASTWhileNode :public ASTStatementNode
 	{
+		int _lineNumber;
+		ASTExprNode* _condition;
+		ASTBlockNode* _whileBlock;
+	public:
+		ASTWhileNode(ASTExprNode * condition, ASTBlockNode* ifBlock,
+			int lineNumber);
 	};
-	class ASTFunctionNode :public ASTStatementNode
+	class ASTFunctionDefinitionNode :public ASTStatementNode
 	{
+		int _lineNumber;
+		std::string _funcName;
+		std::vector < std:: pair<std::string, TYPE >> _parameters;
+		std::vector <TYPE>_signature;
+		std::vector <std::string>_variableNames;
+
+		ASTBlockNode* _funcDefBlock;
+		TYPE _returnType;
+
+	public:
+		ASTFunctionDefinitionNode(std::string,std::vector<std::pair<std::string,TYPE>>,TYPE,
+			ASTBlockNode *funcDefBlock,int lineNumber);
 	};
 
 	template <typename T>

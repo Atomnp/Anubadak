@@ -18,30 +18,30 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="token.cpp">
+    <ClCompile Include="parser\ast.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lexer.cpp">
+    <ClCompile Include="lexer\lexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="parser.cpp">
+    <ClCompile Include="lexer\token.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ast.cpp">
+    <ClCompile Include="parser\parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="token.h">
+    <ClInclude Include="parser\ast.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lexer.h">
+    <ClInclude Include="lexer\lexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="parser.h">
+    <ClInclude Include="parser\parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ast.h">
+    <ClInclude Include="lexer\token.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
