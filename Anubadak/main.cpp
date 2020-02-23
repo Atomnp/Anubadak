@@ -12,7 +12,7 @@ int main()
 	std::string program=" var x:int = (5+10); ";
 	lexer:: Lexer lexer(program);
 	std::cout << "LENGTH OF TOKENS=" << lexer.tokens.size() << std::endl;
-	for (int i = 0; i < lexer.tokens.size(); i++)
+	for (size_t i = 0; i < lexer.tokens.size(); i++)
 	{
 		std::cout << "token = "<<lexer.tokens[i].getVal() << " \t\t\t\t and   type ="<< lexer.tokens[i].getType() << std::endl;
 		
