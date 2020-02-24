@@ -495,11 +495,12 @@ namespace parser
 
 		case TOKEN::TOK_LEFT_BRACKET: {
 			ASTExprNode* subExpr = parseExpression();
+			
 			consumeToken();
-	
 			if(_currentToken.type!=TOKEN::TOK_RIGHT_BRACKET)
 				throw std::runtime_error("Expected ')' on line "
 					+ std::to_string(_currentToken.getLineNumber()) + ".");
+			
 			return subExpr;
 		}
 								

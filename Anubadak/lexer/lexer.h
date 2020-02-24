@@ -31,7 +31,7 @@ namespace lexer
 	{
 	public:
 		///Lexer class constructor  takes string form of whole program as a input 
-		Lexer(std::string& program);
+		Lexer(std::string& program,int currentTokenNumber=0);
 
 		///this method is used by the parser to move through the tokens vectors 
 		Token nextToken();

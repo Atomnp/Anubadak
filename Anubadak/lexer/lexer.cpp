@@ -5,11 +5,11 @@
 
 using namespace lexer;
 
-Lexer::Lexer(std::string& program)
+Lexer::Lexer(std::string& program,int currentTokenNumber):_currentTokenNumber(currentTokenNumber)
 {
 	int currentIndex = 0;
 	Token tempTok;
-	while (currentIndex <= program.length())
+	while (currentIndex <= static_cast<int>(program.length()))
 	{
 		tempTok = generateToken(program, currentIndex);
 		tokens.push_back(tempTok);
@@ -19,7 +19,7 @@ Lexer::Lexer(std::string& program)
 
 Token Lexer::nextToken()
 {
-	if (_currentTokenNumber < tokens.size())
+	if (_currentTokenNumber < static_cast<int>(tokens.size()))
 		return tokens[_currentTokenNumber++];
 	else {
 		std::string error = "Final token surpassed.";
@@ -38,7 +38,7 @@ Token Lexer::generateToken(std::string& program, int& currentIndex)
 	state_stack.push(-1);
 
 	// Ignore whitespaces or newlines in front of lexeme
-	while (currentIndex < program.length() &&
+	while (currentIndex < static_cast<int>(program.length()) &&
 		(program[currentIndex] == ' ' || program[currentIndex] == '\n'))
 		currentIndex++;
 
@@ -83,7 +83,8 @@ Token Lexer::generateToken(std::string& program, int& currentIndex)
 
 	if (isFinal[current_state])
 		return Token(current_state, std::move(lexeme), getLineNumber(program, currentIndex));
-	else std::cout << "Lexical error on line " << std::endl;
+	else
+		throw std::runtime_error("Lexical error occured");
 
 }
 

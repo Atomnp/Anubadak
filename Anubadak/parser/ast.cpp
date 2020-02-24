@@ -26,7 +26,8 @@ ASTIdentifierNode::ASTIdentifierNode(std::string identifier, int lineNumber):
 
 ASTFunctionCallNode::ASTFunctionCallNode(std::string identifier, 
 	std::vector<ASTExprNode*>parameters,
-	int lineNumber):_identifier(identifier),_parameters(std::move(parameters)) {}
+	int lineNumber):_identifier(identifier),_parameters(std::move(parameters)) ,
+	_lineNumber(lineNumber){}
 
 ASTBinaryExprNode::ASTBinaryExprNode(std::string optor, ASTExprNode* expr1,
 	ASTExprNode* expr2, int lineNumber)
