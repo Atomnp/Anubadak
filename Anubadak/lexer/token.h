@@ -52,10 +52,11 @@ namespace lexer {
 	{
 	private:
 		int lineNumber;
-		std::string value;
+		
 		TOKEN determineTokenType(int  finalState, std::string);
 
 	public:
+		std::string value;
 		int getLineNumber() { return lineNumber; }
 		int getType();
 		TOKEN type;

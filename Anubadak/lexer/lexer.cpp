@@ -7,6 +7,7 @@ using namespace lexer;
 
 Lexer::Lexer(std::string& program,int currentTokenNumber):_currentTokenNumber(currentTokenNumber)
 {
+	std::cout << "\n\n********LEXICAL ANALYSIS ********\n\n\n" << std::endl;
 	int currentIndex = 0;
 	Token tempTok;
 	while (currentIndex <= static_cast<int>(program.length()))

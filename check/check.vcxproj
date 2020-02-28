@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{D611FA67-408A-4A5F-93BA-8EA381F5C62C}</ProjectGuid>
-    <RootNamespace>Anubadak</RootNamespace>
+    <ProjectGuid>{7F26DDA7-4D4E-4584-A55B-7A5E5F3D469E}</ProjectGuid>
+    <RootNamespace>check</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -123,22 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="lexer\lexer.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="lexer\token.cpp" />
-    <ClCompile Include="parser\ast.cpp" />
-    <ClCompile Include="parser\parser.cpp" />
-    <ClCompile Include="visitor\senamticAnalysis.cpp" />
-    <ClCompile Include="visitor\xmlVisitor.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="lexer\lexer.h" />
-    <ClInclude Include="lexer\token.h" />
-    <ClInclude Include="parser\ast.h" />
-    <ClInclude Include="parser\parser.h" />
-    <ClInclude Include="visitor\senamticAnalysis.h" />
-    <ClInclude Include="visitor\visitor.h" />
-    <ClInclude Include="visitor\xmlVisitor.h" />
+    <ClCompile Include="check.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

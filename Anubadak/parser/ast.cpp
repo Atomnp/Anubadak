@@ -31,7 +31,10 @@ ASTFunctionCallNode::ASTFunctionCallNode(std::string identifier,
 
 ASTBinaryExprNode::ASTBinaryExprNode(std::string optor, ASTExprNode* expr1,
 	ASTExprNode* expr2, int lineNumber)
-	:_optor(std::move(optor)),_expr1(expr1), _expr2(expr2), _lineNumber(lineNumber) {}
+	:_optor(optor),_expr1(expr1), _expr2(expr2), _lineNumber(lineNumber) {
+	
+	//std::cout << _optor +"*************************************" << std::endl;
+}
 
 ASTUnaryExprNode::ASTUnaryExprNode(std::string optor, ASTExprNode* expr, int lineNumber)
 	: _optor(std::move(optor)), _expr(expr), _lineNumber(lineNumber) {}
@@ -69,3 +72,76 @@ ASTFunctionDefinitionNode::ASTFunctionDefinitionNode(
 		_signature.push_back(parameter.second);
 	}
 }
+
+//definitions of accept funtions
+void ASTProgramNode::accept(visitor::Visitor* visitor) {
+	//checkPurpose
+	//std::cout << "accept function definition for astProgramNode" << std::endl;
+	visitor->visit(this);
+}
+
+void ASTDeclarationNode::accept(visitor::Visitor* visitor) {
+	//checkPurpose
+	//std::cout << "accept function definition for astDeclaration" << std::endl;
+	visitor->visit(this);
+
+}
+void ASTPrintNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+
+}
+
+void ASTAssignmentNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+}
+
+void ASTReturnNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+}
+void ASTBlockNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+}
+void ASTIfNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+}
+void ASTWhileNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+}
+void ASTFunctionDefinitionNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+}
+void ASTIdentifierNode::accept(visitor::Visitor* visitor) {
+	
+	visitor->visit(this);
+	//std::cout << "inside iddntifiernode accept definition ast.cpp" << std::endl;
+}
+void ASTFunctionCallNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+}
+void ASTBinaryExprNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+}
+void ASTUnaryExprNode::accept(visitor::Visitor* visitor) {
+	visitor->visit(this);
+}
+
+	template<>
+	void ASTLiteralNode<int>::accept(visitor::Visitor* visitor) {
+		//std::cout << "astLiteralNode definition in ast.cpp" << std::endl;
+		visitor->visit(this);
+	}
+
+	template<>
+	void ASTLiteralNode<float>::accept(visitor::Visitor* visitor) {
+		visitor->visit(this);
+	}
+
+	template<>
+	void ASTLiteralNode<bool>::accept(visitor::Visitor* visitor) {
+		visitor->visit(this);
+	}
+
+	template<>
+	void ASTLiteralNode<std::string>::accept(visitor::Visitor* visitor) {
+		visitor->visit(this);
+	}

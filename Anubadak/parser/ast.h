@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "../visitor/visitor.h"
 
 //abstract nodes which cannot be instantiaated
 namespace parser
@@ -16,13 +17,19 @@ namespace parser
 	//abstract nodes
 	class ASTNode
 	{
+	public:
+		virtual void accept( visitor::Visitor*) = 0;
 	};
 
 	class ASTExprNode :public ASTNode
 	{
+	public:
+		virtual void accept(visitor ::Visitor*)=0;
 	};
 	class ASTStatementNode : public ASTNode
 	{
+	public:
+		virtual void accept(visitor::Visitor*) = 0;
 
 	};
 
@@ -32,12 +39,14 @@ namespace parser
 	public:
 		std::vector<ASTNode*> _statements;
 		ASTProgramNode(std::vector<ASTNode*>statements);
+		virtual void accept(visitor::Visitor*) override;
 	};
 
 
 	class ASTDeclarationNode :public ASTStatementNode
 	{
 	public:
+		virtual void accept(visitor::Visitor*) override;
 		TYPE _type;
 		std::string _identifier;
 		int _lineNumber;
@@ -51,10 +60,12 @@ namespace parser
 	class ASTAssignmentNode :public ASTStatementNode
 	{
 	private:
+		
+	public:
 		std::string _identifier;
 		int _lineNumber;
 		ASTExprNode* _expression;
-	public:
+		virtual void accept(visitor::Visitor*) override;
 		ASTAssignmentNode(std::string identifier, int lineNumber, ASTExprNode* expression);
 	};
 
@@ -62,63 +73,75 @@ namespace parser
 	class ASTPrintNode :public ASTStatementNode
 	{
 	private:
+	public:
 		int _lineNumber;
 		ASTExprNode* _expression;
-
-	public:
+		virtual void accept(visitor::Visitor*) override;
 		ASTPrintNode(int lineNumber, ASTExprNode* expression);
 	};
 
 
 	class ASTReturnNode :public ASTStatementNode
 	{
+		
+	public:
 		int _lineNumber;
 		ASTExprNode* _expr;
-	public:
+		virtual void accept(visitor::Visitor*) override;
 		ASTReturnNode(ASTExprNode * expression, int lineNumber);
 	};
 
 
 	class ASTBlockNode :public ASTStatementNode
 	{
+		
+	public:
 		std::vector<ASTStatementNode*> _statements;
 		int _lineNumber;
-	public:
+		virtual void accept(visitor::Visitor*) override;
 		ASTBlockNode(std::vector<ASTStatementNode*> statements, int lineNumber);
+
 	};
 
 
 	class ASTIfNode :public ASTStatementNode
 	{
+		
+	public:
 		int _lineNumber;
 		ASTExprNode* _condition;
 		ASTBlockNode* _ifBlock;
 		ASTBlockNode* _elseBlock;
-	public:
+		virtual void accept(visitor::Visitor*) override;
 		ASTIfNode(ASTExprNode *condition, ASTBlockNode * ifBlock , 
 			int lineNumber, ASTBlockNode* elseBlock=nullptr);
 	};
 	class ASTWhileNode :public ASTStatementNode
 	{
+		
+	public:
 		int _lineNumber;
 		ASTExprNode* _condition;
 		ASTBlockNode* _whileBlock;
-	public:
+		virtual void accept(visitor::Visitor*) override;
 		ASTWhileNode(ASTExprNode * condition, ASTBlockNode* ifBlock,
 			int lineNumber);
 	};
 	class ASTFunctionDefinitionNode :public ASTStatementNode
 	{
+		
+
+	public:
 		int _lineNumber;
 		std::string _funcName;
-		std::vector < std:: pair<std::string, TYPE >> _parameters;
+		std::vector < std::pair<std::string, TYPE >> _parameters;
 		std::vector <TYPE>_signature;
 		std::vector <std::string>_variableNames;
 
 		ASTBlockNode* _funcDefBlock;
 		TYPE _returnType;
 
-	public:
+		virtual void accept(visitor::Visitor*) override;
 		ASTFunctionDefinitionNode(std::string,std::vector<std::pair<std::string,TYPE>>,TYPE,
 			ASTBlockNode *funcDefBlock,int lineNumber);
 	};
@@ -127,6 +150,7 @@ namespace parser
 	class ASTLiteralNode:public ASTExprNode
 	{
 	public:
+		virtual void accept(visitor::Visitor*) override;
 		ASTLiteralNode(T value, int lineNumber) :_value(value), _lineNumber(lineNumber){}
 		T _value;
 		int _lineNumber;
@@ -136,32 +160,42 @@ namespace parser
 		std::string _identifier;
 		int _lineNumber;
 	public:
+		int getLineNumber() { return _lineNumber; }
+		std::string getIdentifier() { return _identifier; }
+		virtual void accept(visitor::Visitor*) override;
 		ASTIdentifierNode(std::string identifier , int lineNumber);
 	};
 	
 	class ASTFunctionCallNode :public ASTExprNode {
+		
+	public:
 		std::string _identifier;
 		int _lineNumber;
 		std::vector<ASTExprNode*>_parameters;
-	public:
+		int getLineNumber() { return _lineNumber; }
+		std::string getIdentifier() { return _identifier; }
+		virtual void accept(visitor::Visitor*) override;
 		ASTFunctionCallNode(std::string identifier,std::vector<ASTExprNode*>parameters, int lineNumber);
 	};
 	
 	class ASTBinaryExprNode :public ASTExprNode {
+	public:
 		std::string _optor;
 		int _lineNumber;
 		ASTExprNode* _expr1;
 		ASTExprNode* _expr2;
-	public:
-		ASTBinaryExprNode(std::string optor , ASTExprNode* expr1, ASTExprNode* expr2, int lineNumber);
+		virtual void accept(visitor::Visitor*) override;
+		ASTBinaryExprNode(std::string  optor , ASTExprNode* expr1, ASTExprNode* expr2, int lineNumber);
 	};
 	
 	class ASTUnaryExprNode :public ASTExprNode {
+		
+		
+	public:
 		std::string _optor;
 		int _lineNumber;
 		ASTExprNode* _expr;
-		
-	public:
+		virtual void accept(visitor::Visitor*) override;
 		ASTUnaryExprNode(std::string optor, ASTExprNode * expr, int lineNumber);
 	};
 	

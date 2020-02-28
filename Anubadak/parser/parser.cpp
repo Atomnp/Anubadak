@@ -7,7 +7,7 @@
 #include"parser.h"
 #include "../lexer/lexer.h"
 
-void check(std::string printText)
+static void check(std::string printText)
 {
 	std::cout << printText << std::endl;
 }
@@ -20,6 +20,7 @@ namespace parser
 {
 	Parser::Parser(lexer::Lexer* lex) :_lex(lex)
 	{
+		check("\n\n ***** PARSING PORTION ****\n\n");
 		_currentToken = lex->nextToken();
 		_nextToken = lex->nextToken();
 	}
@@ -68,7 +69,7 @@ namespace parser
 			return parseFunctionDefinition();
 
 		default: {
-			throw std::runtime_error("sorry, but i only know variable declaration"
+			throw std::runtime_error("invalid syntax at line "
 				+ std::to_string(_currentToken.getLineNumber()) + ".");
 		}
 		}	
@@ -87,6 +88,7 @@ namespace parser
 			throw std::runtime_error("Expected variable name after 'var' on line "
 				+ std::to_string(_currentToken.getLineNumber()) + ".");
 		}
+		identifier = _currentToken.getVal();
 
 		consumeToken();
 		if (_currentToken.type != TOKEN::TOK_COLON)
@@ -98,9 +100,6 @@ namespace parser
 		consumeToken();
 		// in future identifier will be passed into this function
 		type = parseType();
-		//checkPurpose
-		std::cout <<"<<<<<<<<<<<<<<<<<<<<<<<<,,"<< std::endl;
-		std::cout << static_cast<int>(type) << std::endl;
 
 		consumeToken();
 		if (_currentToken.type != TOKEN::TOK_EQUALS) {
@@ -109,11 +108,11 @@ namespace parser
 		}
 		expr = parseExpression();
 		//checkPurpose
-		std::cout << "curretn token=" << _currentToken.getVal() << " type= "<<_currentToken.getType() << std::endl;
+		//std::cout << "curretn token=" << _currentToken.getVal() << " type= "<<_currentToken.getType() << std::endl;
 		if (_currentToken.type != TOKEN::TOK_SEMICOLON)
 		consumeToken();	
 		//checkPurpose
-		std::cout << "curretn token="<<_currentToken.getVal() << " type= "<< _currentToken.getType() << std::endl;
+		//std::cout << "curretn token="<<_currentToken.getVal() << " type= "<< _currentToken.getType() << std::endl;
 		if (_currentToken.type != TOKEN::TOK_SEMICOLON)
 		{
 			throw std::runtime_error("expected ';'   in line "
@@ -324,6 +323,7 @@ namespace parser
 			throw std::runtime_error("Expected identifier after 'def' on line "
 				+ std::to_string(_currentToken.getLineNumber()) + ".");
 		}
+		funcName = _currentToken.value;
 		consumeToken();
 		if (_currentToken.type != TOKEN::TOK_LEFT_BRACKET)
 		{
@@ -332,10 +332,15 @@ namespace parser
 		consumeToken();
 		if (_currentToken.type != TOKEN::TOK_RIGHT_BRACKET)
 		{
+			consumeToken();
 			parameters.push_back(*parseFormalParameter());
+			
 			consumeToken();
 			while (_currentToken.type == TOKEN::TOK_COMMA) {
 				consumeToken();
+
+				//checkPurpose
+				std::cout << _currentToken.getVal() << std::endl << std::endl;
 				parameters.push_back(*parseFormalParameter());
 				consumeToken();
 			}
@@ -370,7 +375,9 @@ namespace parser
 	 std::pair<std::string, TYPE>*Parser::parseFormalParameter() {
 		 std::string identifier;
 		 TYPE type;
-		 consumeToken();
+		 //checkPurpose
+		 std::cout << _currentToken.getVal() << std::endl<<std::endl;
+
 		 if (_currentToken.getType() != static_cast<int>(TOKEN::TOK_IDENTIFIER)) {
 			 throw std::runtime_error("Expected identifier on line "
 				 + std::to_string(_currentToken.getLineNumber()) + ".");
@@ -424,8 +431,12 @@ namespace parser
 		int lineNumber = _currentToken.getLineNumber();
 
 		if (_nextToken.type == TOKEN::TOK_RELATIONAL_OP) {
+
 			consumeToken();
-			return new ASTBinaryExprNode(_currentToken.getVal(), simpleExpression, parseExpression(), lineNumber);
+			//i cant write _currentToken.getVal() in the argument because c++ donot guranteee the order of
+			//execution of funciton
+			std::string op = _currentToken.getVal();
+			return new ASTBinaryExprNode(op, simpleExpression, parseExpression(), lineNumber);
 		}
 		return simpleExpression;
 
@@ -438,8 +449,11 @@ namespace parser
 		int lineNumber = _currentToken.getLineNumber();
 
 		if (_nextToken.type == TOKEN::TOK_ADDITIVE_OP) {
+			//i cant write _currentToken.getVal() in the argument because c++ donot guranteee the order of
+			//execution of funciton
 			consumeToken();
-			return new ASTBinaryExprNode(_currentToken.getVal(), term, parseSimpleExpression(), lineNumber);
+			std::string op = _currentToken.value;
+			return new ASTBinaryExprNode(op, term, parseSimpleExpression(), lineNumber);
 		}
 		return term;
 		
@@ -450,27 +464,33 @@ namespace parser
 		int lineNumber = _currentToken.getLineNumber();
 
 		if (_nextToken.type == TOKEN::TOK_MULTIPLICATIVE_OP) {
+			//i cant write _currentToken.getVal() in the argument because c++ donot guranteee the order of
+			//execution of funciton
 			consumeToken();
-			return new ASTBinaryExprNode(_currentToken.getVal(), factor, parseExpressionTerm(), lineNumber);
+			std::string op = _currentToken.getVal();
+			return new ASTBinaryExprNode(op, factor, parseExpressionTerm(), lineNumber);
 		}
 		return factor;
-		
-
 	}
+	
 	ASTExprNode* Parser::parseExpressionFactor() {
 		consumeToken();
 		int lineNumber = _currentToken.getLineNumber();
-		
+
 		switch (_currentToken.type)
 		{
-		case TOKEN::TOK_INT:
+		case TOKEN::TOK_INT: {
+			//check("in int type");
 			return new ASTLiteralNode<int>(std::stoi(_currentToken.getVal()), lineNumber);
+		}
 
-		case TOKEN::TOK_REAL:
-			return new ASTLiteralNode<float>(std::stof(_currentToken.getVal()), lineNumber);
+		case TOKEN::TOK_REAL: {
+			//check("in real type");
+			return new ASTLiteralNode<float>(std::stof(_currentToken.getVal()), lineNumber); 
+		}
 
 		case TOKEN::TOK_BOOL:
-			return new ASTLiteralNode<bool>(_currentToken.getVal()=="true", lineNumber);
+			return new ASTLiteralNode<bool>(_currentToken.getVal() == "true", lineNumber);
 
 		case TOKEN::TOK_STRING:
 		{
@@ -480,7 +500,6 @@ namespace parser
 			return new ASTLiteralNode<std::string>(_currentToken.getVal(), lineNumber);
 		}
 
-
 		case TOKEN::TOK_IDENTIFIER: {
 			if (_nextToken.type == TOKEN::TOK_LEFT_BRACKET) {
 				return parseFunctionCallExpr();
@@ -488,25 +507,23 @@ namespace parser
 			else
 				return new ASTIdentifierNode(_currentToken.getVal(), _currentToken.getLineNumber());
 		}
-
 		case TOKEN::TOK_ADDITIVE_OP:
-		case TOKEN::TOK_NOT:
-			return new ASTUnaryExprNode(_currentToken.getVal(), parseExpression(), _currentToken.getLineNumber());
-
+		case TOKEN::TOK_NOT: {
+			std::string op = _currentToken.getVal();
+			return new ASTUnaryExprNode(op, parseExpression(), _currentToken.getLineNumber());
+		}
 		case TOKEN::TOK_LEFT_BRACKET: {
 			ASTExprNode* subExpr = parseExpression();
-			
+
 			consumeToken();
-			if(_currentToken.type!=TOKEN::TOK_RIGHT_BRACKET)
+			if (_currentToken.type != TOKEN::TOK_RIGHT_BRACKET)
 				throw std::runtime_error("Expected ')' on line "
 					+ std::to_string(_currentToken.getLineNumber()) + ".");
-			
+
 			return subExpr;
 		}
-								
 		}
 	}
-	
 	ASTFunctionCallNode* Parser::parseFunctionCallExpr()
 	{
 		std::string identifier = _currentToken.getVal();
