@@ -1,9 +1,11 @@
+
 /**
 *@author Aayush Neupane
 *@date feb 2019
 */
 
 #pragma once
+const bool DEBUG = !true;
 
 namespace lexer {
 

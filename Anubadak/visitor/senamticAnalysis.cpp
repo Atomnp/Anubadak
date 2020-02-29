@@ -3,7 +3,8 @@
 
 static void check(std::string printText)
 {
-	std::cout << printText << std::endl;
+	if(DEBUG)
+		std::cout << printText << std::endl;
 }
 
 bool SemanticScope::alreadyDeclared(std::string identifier, std::vector<parser::TYPE> signature) {
@@ -92,12 +93,14 @@ int SemanticScope::getDeclarationLine(std::string identifier, std::vector<parser
 }
 
 SemanticAnalyser::SemanticAnalyser() {
-	std::cout << std::endl;
-	check("________________________________________________________________________________________________-");
-	check("________________________________________________________________________________________________-");
-	std::cout << std::endl;
-	std::cout << std::endl;
-	check("****SEMANTIC ANALYSIS ****\n\n");
+	if (DEBUG) {
+		std::cout << std::endl;
+		check("________________________________________________________________________________________________-");
+		check("________________________________________________________________________________________________-");
+		std::cout << std::endl;
+		std::cout << std::endl;
+		check("****SEMANTIC ANALYSIS ****\n\n");
+	}
 	_scopes.push_back(new SemanticScope());
 }
 
@@ -236,13 +239,13 @@ void SemanticAnalyser::visit(parser::ASTUnaryExprNode* unaryNode) {
 	std::string op = unaryNode->_optor;
 	unaryNode->_expr->accept(this);
 	parser::TYPE type = _currentExpressionType;
-	//unary operator is alowed only for integer
+
 	if (op == "+" || op == "-") {
-		if (type != parser::TYPE::INT) {
-			throw std::runtime_error("error occured in unary operation in line int expected" + 
+		if (type != parser::TYPE::INT and type!=parser::TYPE::REAL) {
+			throw std::runtime_error("error occured in unary operation int or real required in line" + 
 				std::to_string(unaryNode->_lineNumber));
 		}
-		_currentExpressionType = parser::TYPE::INT;
+		_currentExpressionType = type;
 	}
 	if (op == "not") {
 		if (type != parser::TYPE::BOOL) {
@@ -257,18 +260,30 @@ void SemanticAnalyser::visit(parser::ASTUnaryExprNode* unaryNode) {
 
 
 void SemanticAnalyser::visit(parser::ASTFunctionCallNode* func) {
-
+	//checkPurpose
+	//std::cout << std::endl;
+	//std::cout << func->_lineNumber;
 	// Determine the signature of the function
 	std::vector<parser::TYPE> signature;
 
+	//checkPurpose
+
+	//std::cout << "\n\n****************started checking func*************\n\n" << std::endl;
 	// For each parameter,
 	for (auto param : func->_parameters) {
-
 		// visit to update current expr type
 		param->accept(this);
 
 		// add the type of current expr to signature
+		//std::cout << "\n\n current expression type  " + inString(_currentExpressionType) << std::endl;
 		signature.push_back(_currentExpressionType);
+	}
+	//checkPurpose
+	//std::cout << "for the fnction =" << func->getIdentifier() << std::endl;
+	if (DEBUG) {
+		for (auto param : signature) {
+			std::cout << inString(param)<<std::endl;
+		}
 	}
 	////checkPurpose
 	//std::cout << "\n\n\n\n\n\n\nparammeters of called function " << std::endl;
@@ -350,6 +365,8 @@ void SemanticAnalyser::visit(parser::ASTLiteralNode<int>* declaration) {
 	_currentExpressionType = parser::TYPE::INT;
 }
 void SemanticAnalyser::visit(parser::ASTLiteralNode<float>* declaration) {
+	//checkPurpose
+	//std::cout << "checking the func parameters in the float node" << std::endl;
 	_currentExpressionType = parser::TYPE::REAL;
 }
 void SemanticAnalyser::visit(parser::ASTLiteralNode<bool>* declaration) {

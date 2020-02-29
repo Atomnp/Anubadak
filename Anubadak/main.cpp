@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include "lexer/lexer.h"
 #include "parser/parser.h"
@@ -19,17 +20,21 @@ int main()
 		program.append(tempString);
 		program.append("\n");
 	}
-
-	std::cout << program << std::endl;
+	if (DEBUG == true) {
+		std::cout << "the program is  shown below ......" << std::endl;
+		std::cout << program << std::endl;
+	}
 
 	//std::string program=
 	//	" //this is comment \n def func(x: int):int \n  {print(\" i m the function \");\nreturn 2*x;} \n var y: int=func(9); print(\"hello there \\n\");\n print(y);";
 	lexer:: Lexer lexer(program);
-	std::cout << "LENGTH OF TOKENS=" << lexer.tokens.size() << std::endl;
-	for (size_t i = 0; i < lexer.tokens.size(); i++)
-	{
-		std::cout << "token = "<<lexer.tokens[i].getVal() << " \t\t\t\t and   type ="<< lexer.tokens[i].getType() << std::endl;
-		
+	if (DEBUG) {
+		std::cout << "LENGTH OF TOKENS=" << lexer.tokens.size() << std::endl;
+		for (size_t i = 0; i < lexer.tokens.size(); i++)
+		{
+			std::cout << "token = " << lexer.tokens[i].getVal() << " \t\t\t\t and   type =" << lexer.tokens[i].getType() << std::endl;
+
+		}
 	}
 	parser::ASTProgramNode* prog = nullptr;
 	parser::Parser parser(&lexer);

@@ -2,7 +2,8 @@
 
 
 void check(std::string someString) {
-	std::cout << someString << std::endl;
+	if(DEBUG)
+		std::cout << someString << std::endl;
 }
 
 bool InterpreterScope::alreadyDeclared(std::string identifier) {
@@ -140,7 +141,7 @@ void Interpreter::visit(parser::ASTProgramNode* prog) {
 				 _currentExpressionValue.s);
 			 break;
 		 }
-		 check("declaration sucessfully interpreted");
+		// check("declaration sucessfully interpreted");
 
 	 }
 	 void Interpreter::visit(parser::ASTAssignmentNode* assignment) {
@@ -261,7 +262,7 @@ void Interpreter::visit(parser::ASTProgramNode* prog) {
 		v.f = lit->_value;
 		_currentExpressionType = parser::TYPE::REAL;
 		_currentExpressionValue = std::move(v);
-		std::cout << " hello there i m float literal" << std::endl;
+		//std::cout << " hello there i m float literal" << std::endl;
 	}
 	void Interpreter::visit(parser::ASTLiteralNode<bool>* lit) {
 		value_t v;
@@ -337,6 +338,7 @@ void Interpreter::visit(parser::ASTProgramNode* prog) {
 
 		 value_t v;
 		 if (op == "+" or op == "-" or op == "/" or op == "*") {
+			 
 			 if (firstExpType == parser::TYPE::INT && secExpType == parser::TYPE::INT) {
 				 _currentExpressionType = parser::TYPE::INT;
 				 if (op == "+")
@@ -356,14 +358,16 @@ void Interpreter::visit(parser::ASTProgramNode* prog) {
 				 else if (op == "*")
 					 v.i = firstExpVal.i * secExpVal.i;
 				 else if (op == "/") {
-					 if (secExpVal.i == 0)
+					 if (secExpVal.i == 0) {
+						
 						 throw std::runtime_error("Division by zero encountered on line "
 							 + std::to_string(binaryStatement->_lineNumber) + ".");
+					 }
 					 v.i = firstExpVal.i / secExpVal.i;
 				 }
 			 }
 			 //if any one of them is float
-			 if (firstExpType == parser::TYPE::REAL or secExpType == parser::TYPE::REAL) {
+			 else if (firstExpType == parser::TYPE::REAL or secExpType == parser::TYPE::REAL) {
 				 _currentExpressionType = parser::TYPE::REAL;
 				 float l = firstExpVal.f;
 				 float r = secExpVal.f;
@@ -384,16 +388,22 @@ void Interpreter::visit(parser::ASTProgramNode* prog) {
 				 else if (op == "*")
 					 v.f = l * r;
 				 else if (op == "/") {
-					 if (secExpVal.i == 0)
+					 if (secExpVal.f == 0 && secExpVal.i==0) {
+						 std::cout << "ho raixa................................. " << std::endl;
 						 throw std::runtime_error("Division by zero encountered on line "
 							 + std::to_string(binaryStatement->_lineNumber) + ".");
+
+					 }
+						
 					 v.f = l / r;
 				 }
 				 // Remaining case is for strings
-				 else {
-					 _currentExpressionType = parser::TYPE::STRING;
-					 v.s = firstExpVal.s + secExpVal.s;
-				 }
+		
+			 }
+			 else {
+		
+				 _currentExpressionType = parser::TYPE::STRING;
+				 v.s = firstExpVal.s + secExpVal.s;
 			 }
 		 }
 			 // Now bool

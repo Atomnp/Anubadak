@@ -9,7 +9,8 @@
 
 static void check(std::string printText)
 {
-	std::cout << printText << std::endl;
+	if(DEBUG)
+		std::cout << printText << std::endl;
 }
 
 
@@ -20,7 +21,8 @@ namespace parser
 {
 	Parser::Parser(lexer::Lexer* lex) :_lex(lex)
 	{
-		check("\n\n ***** PARSING PORTION ****\n\n");
+		if(DEBUG)
+			check("\n\n ***** PARSING PORTION ****\n\n");
 		_currentToken = lex->nextToken();
 		_nextToken = lex->nextToken();
 	}
@@ -69,7 +71,7 @@ namespace parser
 			return parseFunctionDefinition();
 
 		default: {
-			throw std::runtime_error("invalid syntax at line "
+			throw std::runtime_error("invalid syntax at line may be you forgot set "
 				+ std::to_string(_currentToken.getLineNumber()) + ".");
 		}
 		}	
@@ -118,8 +120,8 @@ namespace parser
 			throw std::runtime_error("expected ';'   in line "
 				+ std::to_string(_currentToken.getLineNumber()));
 		}
-
-		std::cout << "sucessfully declared variable " << identifier << std::endl;
+		if(DEBUG)
+			std::cout << "sucessfully declared variable " << identifier << std::endl;
 		
 		return new ASTDeclarationNode(type, identifier, lineNumber, expr);
 	}
@@ -339,7 +341,8 @@ namespace parser
 				consumeToken();
 
 				//checkPurpose
-				std::cout << _currentToken.getVal() << std::endl << std::endl;
+				if (DEBUG)
+					std::cout << _currentToken.getVal() << std::endl << std::endl;
 				parameters.push_back(*parseFormalParameter());
 				consumeToken();
 			}
@@ -375,7 +378,8 @@ namespace parser
 		 std::string identifier;
 		 TYPE type;
 		 //checkPurpose
-		 std::cout << _currentToken.getVal() << std::endl<<std::endl;
+		 if(DEBUG)
+			std::cout << _currentToken.getVal() << std::endl<<std::endl;
 
 		 if (_currentToken.getType() != static_cast<int>(TOKEN::TOK_IDENTIFIER)) {
 			 throw std::runtime_error("Expected identifier on line "
@@ -480,11 +484,16 @@ namespace parser
 		{
 		case TOKEN::TOK_INT: {
 			//check("in int type");
+			//std::cout << "int maaa" << std::endl;
 			return new ASTLiteralNode<int>(std::stoi(_currentToken.getVal()), lineNumber);
 		}
 
 		case TOKEN::TOK_REAL: {
 			//check("in real type");
+			/*std::cout << _currentToken.getLineNumber();
+			std::cout << "float maaa" << std::endl;
+			std::cout << "float maaa"<< std::stof(_currentToken.getVal()) << std::endl;*/
+
 			return new ASTLiteralNode<float>(std::stof(_currentToken.getVal()), lineNumber); 
 		}
 
@@ -549,6 +558,8 @@ namespace parser
 		}
 		case TOKEN::TOK_ADDITIVE_OP:
 		case TOKEN::TOK_NOT: {
+			//checkPurpose
+			check("Unary expression node....................................");
 			std::string op = _currentToken.getVal();
 			return new ASTUnaryExprNode(op, parseExpression(), _currentToken.getLineNumber());
 		}
@@ -588,12 +599,14 @@ namespace parser
 		}
 			
 		//checkPurpose
-		std::cout << "curretn token =" << _currentToken.getVal()<<std::endl;
+		if (DEBUG)
+			std::cout << "curretn token =" << _currentToken.getVal()<<std::endl;
 		
 		if (_currentToken.type != TOKEN::TOK_RIGHT_BRACKET) {
 			throw std::runtime_error("Expected ')' on line "
 				+ std::to_string(_currentToken.getLineNumber()) + ".");
 		}
+
 
 		return new ASTFunctionCallNode(identifier, *parameters, lineNumber);
 

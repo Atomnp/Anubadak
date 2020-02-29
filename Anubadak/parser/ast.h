@@ -1,4 +1,6 @@
 #pragma once
+//just inculded for DEBUG
+#include "../lexer/token.h"
 #include <iostream>
 #include <vector>
 #include "../visitor/visitor.h"
