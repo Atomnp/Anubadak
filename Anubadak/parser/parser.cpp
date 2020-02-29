@@ -332,7 +332,6 @@ namespace parser
 		consumeToken();
 		if (_currentToken.type != TOKEN::TOK_RIGHT_BRACKET)
 		{
-			consumeToken();
 			parameters.push_back(*parseFormalParameter());
 			
 			consumeToken();
@@ -494,10 +493,51 @@ namespace parser
 
 		case TOKEN::TOK_STRING:
 		{
-			//removes two "  from begining and end
-			std::string str = _currentToken.getVal().substr(1, _currentToken.getVal().size() - 2);
-			//TODO: string checking for varipus specia; characters is left for  now
-			return new ASTLiteralNode<std::string>(_currentToken.getVal(), lineNumber);
+			// Remove " character from front and end of lexeme
+			std::string str = _currentToken.value.substr(1, _currentToken.value.size() - 2);
+
+			// Replace \" with quote
+			size_t pos = str.find("\\\"");
+			while (pos != std::string::npos) {
+				// Replace
+				str.replace(pos, 2, "\"");
+				// Get next occurrence from current position
+				pos = str.find("\\\"", pos + 2);
+			}
+
+			// Replace \n with newline
+			pos = str.find("\\n");
+			while (pos != std::string::npos) {
+				// Replace
+				str.replace(pos, 2, "\n");
+				// Get next occurrence from current position
+				pos = str.find("\\n", pos + 2);
+			}
+
+			// Replace \t with tab
+			pos = str.find("\\t");
+			while (pos != std::string::npos) {
+				// Replace
+				str.replace(pos, 2, "\t");
+				// Get next occurrence from current position
+				pos = str.find("\\t", pos + 2);
+			}
+
+			// Replace \b with backslash
+			pos = str.find("\\b");
+			while (pos != std::string::npos) {
+				// Replace
+				str.replace(pos, 2, "\\");
+				// Get next occurrence from current position
+				pos = str.find("\\b", pos + 2);
+			}
+
+			return new ASTLiteralNode<std::string>(std::move(str), lineNumber);
+
+			////removes two "  from begining and end
+			//std::string str = _currentToken.getVal().substr(1, _currentToken.getVal().size() - 2);
+			////TODO: string checking for varipus specia; characters is left for  now
+			//return new ASTLiteralNode<std::string>(_currentToken.getVal(), lineNumber);
 		}
 
 		case TOKEN::TOK_IDENTIFIER: {

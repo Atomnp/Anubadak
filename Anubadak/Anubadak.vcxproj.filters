@@ -36,6 +36,9 @@
     <ClCompile Include="visitor\xmlVisitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="visitor\interpreter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lexer\lexer.h">
@@ -59,5 +62,11 @@
     <ClInclude Include="visitor\xmlVisitor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="visitor\interpreter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="myprogram.txt" />
   </ItemGroup>
 </Project>

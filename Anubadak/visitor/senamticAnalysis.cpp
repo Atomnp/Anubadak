@@ -24,18 +24,7 @@ bool SemanticScope::alreadyDeclared(std::string identifier, std::vector<parser::
 	return false;
 }
 bool SemanticScope::alreadyDeclared(std::string identifier) {
-	//find return iterator to the end if it cant find
-	//std::cout << std::boolalpha << "identifier al =" +identifier+"a" << std::endl;
-	std::cout << "printing the values in variable symbol table map" << std::endl;
-	for (auto i = _variableSymbolTable.begin(); i != _variableSymbolTable.end(); i++) {
-		std::cout << i->first << std::endl;
-	}
-	std::cout << identifier << std::endl;
-	if (_variableSymbolTable.find("x") != _variableSymbolTable.end())
-	{
-		std::cout<<"found"<<std::endl;
-	}
-	return _variableSymbolTable.find("x") != _variableSymbolTable.end();
+	return _variableSymbolTable.find(identifier) != _variableSymbolTable.end();
 }
 parser::TYPE SemanticScope::getType(std::string identifier) {
 	if (alreadyDeclared(identifier)) {

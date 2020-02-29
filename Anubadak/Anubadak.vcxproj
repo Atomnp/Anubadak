@@ -128,6 +128,7 @@
     <ClCompile Include="lexer\token.cpp" />
     <ClCompile Include="parser\ast.cpp" />
     <ClCompile Include="parser\parser.cpp" />
+    <ClCompile Include="visitor\interpreter.cpp" />
     <ClCompile Include="visitor\senamticAnalysis.cpp" />
     <ClCompile Include="visitor\xmlVisitor.cpp" />
   </ItemGroup>
@@ -136,9 +137,13 @@
     <ClInclude Include="lexer\token.h" />
     <ClInclude Include="parser\ast.h" />
     <ClInclude Include="parser\parser.h" />
+    <ClInclude Include="visitor\interpreter.h" />
     <ClInclude Include="visitor\senamticAnalysis.h" />
     <ClInclude Include="visitor\visitor.h" />
     <ClInclude Include="visitor\xmlVisitor.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="myprogram.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

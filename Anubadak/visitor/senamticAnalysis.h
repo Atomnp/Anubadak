@@ -18,9 +18,11 @@ class SemanticScope {
 	//function return type
 	//function signature
 	//and function lineNumber
+	std::multimap<std::string, std::tuple<parser::TYPE, std::vector<parser::TYPE>, int>>functionSymbolTable;
 	
 public:
-	std::multimap<std::string, std::tuple<parser::TYPE, std::vector<parser::TYPE>, int>>functionSymbolTable;
+	
+	
 	parser::TYPE getType(std::string identifier);
 	parser::TYPE getType(std::string identifier, std::vector<parser::TYPE>signature);
 	void declare(std::string identifier, parser::TYPE,int LineNumber);

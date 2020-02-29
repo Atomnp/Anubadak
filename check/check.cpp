@@ -1,8 +1,17 @@
 #include <iostream>
-#include <map>
-
+#include <fstream>
+#include <string>
 int main()
 {
-	std::multimap<std::string, std::tuple<int, float>>signature;
-	signature.insert = std::make_tuple<int, float>(1, 1.00);
+	std::ifstream inputFile;
+	inputFile.open("myprogram.txt");
+	std::string myProgram;
+	std::string tempString;
+	while (std::getline(inputFile, tempString)) {
+		myProgram.append(tempString);
+		myProgram.append("\n");
+	}
+	std::cout << myProgram;
+
+	return 0;
 }

@@ -1,0 +1,24 @@
+//this is a program for anubadak
+
+var i: int=0;
+
+//this function calculated the factorial of give integer n
+
+def fact(x:int): int{
+	
+	if(x==0)
+	{
+		return 1;
+	}
+	else
+	{
+		return x*fact(x-1);
+	}
+}
+
+var x:int =fact(5);
+print("the value of factorial of ");
+print(5);
+print(" is =");
+print(x);
+print("\n");

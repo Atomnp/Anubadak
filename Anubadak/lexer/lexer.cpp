@@ -13,7 +13,9 @@ Lexer::Lexer(std::string& program,int currentTokenNumber):_currentTokenNumber(cu
 	while (currentIndex <= static_cast<int>(program.length()))
 	{
 		tempTok = generateToken(program, currentIndex);
-		tokens.push_back(tempTok);
+		//ignore comment
+		if(tempTok.getType()!= static_cast<int>(TOKEN::TOK_COMMENT))
+			tokens.push_back(tempTok);
 
 	}
 }
@@ -40,7 +42,8 @@ Token Lexer::generateToken(std::string& program, int& currentIndex)
 
 	// Ignore whitespaces or newlines in front of lexeme
 	while (currentIndex < static_cast<int>(program.length()) &&
-		(program[currentIndex] == ' ' || program[currentIndex] == '\n'))
+		(program[currentIndex] == ' ' || program[currentIndex] == '\n' 
+			|| program[currentIndex] == '\t'))
 		currentIndex++;
 
 	// Check if EOF
@@ -176,7 +179,7 @@ int Lexer::transitionFunction(int currentState, char symbol)
 
 int Lexer::getLineNumber(std::string& program, int currentIndex)
 {
-	int lineNumber = 0;
+	int lineNumber = 1;
 	for (int i = 0; i < currentIndex; i++)
 	{
 		if (program[i] == '\n')
