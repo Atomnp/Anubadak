@@ -44,7 +44,6 @@ namespace parser
 		return new parser::ASTProgramNode(*statements);
 	}
 	ASTNode* Parser::parseStatement() {
-
 		switch (_currentToken.type)
 		
 		{
@@ -83,7 +82,7 @@ namespace parser
 			}
 
 			else
-				throw std::runtime_error("invalid syntax calling the function at line "
+				throw std::runtime_error("invalid syntax  at line "
 					+ std::to_string(_currentToken.getLineNumber()) + ".");
 
 		default: {

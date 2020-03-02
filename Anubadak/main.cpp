@@ -41,27 +41,27 @@ int main()
 	try {
 		
 		prog=parser.parse_program();
+		
+		try {
+			visitor::SemanticAnalyser semantic;
+			semantic.visit(prog);
+			try {
+				visitor::Interpreter interpreter;
+				interpreter.visit(prog);
+			}
+			catch (std::exception & e) {
+				throw;
+			}
+		}
+		catch (std::exception & e) {
+			throw;
+		}
 
 	}
 	catch (std::exception & exception)
 	{
 		std::cerr << "error :" << exception.what() << std::endl;
 	}
-	try {
-		visitor::SemanticAnalyser semantic;
-		semantic.visit(prog);
-	}
-	catch (std::exception & e) {
-		std::cerr << "ERROR:: semantic analysisis error occured  description:: " << e.what() << std::endl;
-	}
 	
-	try {
-		visitor::Interpreter interpreter;
-		interpreter.visit(prog);
-	}
-	catch (std::exception & e) {
-		std::cerr << "interprete ERROR:" << e.what() << std::endl;
-	}
-
 	return 0;
 }
