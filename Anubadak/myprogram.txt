@@ -8,5 +8,5 @@ else
 return n*fact(n-1);}
 }
 var x: int = 5;
-print("aayush"+"neupane");
+print("aayush"+"neupane")
 print(x);
