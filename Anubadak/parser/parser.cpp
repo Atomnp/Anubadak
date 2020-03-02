@@ -25,6 +25,13 @@ namespace parser
 			check("\n\n ***** PARSING PORTION ****\n\n");
 		_currentToken = lex->nextToken();
 		_nextToken = lex->nextToken();
+
+	}
+	///
+	Parser::Parser(lexer::Lexer* lex, unsigned int tokens) : _lex(lex) {
+		_nextToken = lex->nextToken();
+		for (unsigned int i = 0; i < tokens; i++)
+			consumeToken();
 	}
 
 	///

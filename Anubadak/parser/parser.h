@@ -12,6 +12,7 @@ namespace parser
 	public:
 		//parser ko main kura parser constructor ta lekhekai xaina ni
 		Parser(lexer::Lexer* lex);
+		Parser(lexer::Lexer* lex, unsigned int tokens);
 		void consumeToken();
 		parser::ASTProgramNode* parse_program();
 		parser::ASTStatementNode* parseStatement();

@@ -50,6 +50,7 @@ private:
 public:
 	//constructor for semanticAnalyser
 	SemanticAnalyser();
+	SemanticAnalyser(SemanticScope*);
 
 	virtual  void visit(parser::ASTProgramNode*) override;
 	virtual  void visit(parser::ASTDeclarationNode*) override;
