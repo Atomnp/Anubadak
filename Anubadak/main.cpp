@@ -48,7 +48,7 @@ int main()
 		std::cerr << "error :" << exception.what() << std::endl;
 	}
 	try {
-		SemanticAnalyser semantic;
+		visitor::SemanticAnalyser semantic;
 		semantic.visit(prog);
 	}
 	catch (std::exception & e) {
@@ -56,7 +56,7 @@ int main()
 	}
 	
 	try {
-		Interpreter interpreter;
+		visitor::Interpreter interpreter;
 		interpreter.visit(prog);
 	}
 	catch (std::exception & e) {
