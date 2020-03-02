@@ -130,7 +130,6 @@
     <ClCompile Include="parser\parser.cpp" />
     <ClCompile Include="visitor\interpreter.cpp" />
     <ClCompile Include="visitor\senamticAnalysis.cpp" />
-    <ClCompile Include="visitor\xmlVisitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lexer\lexer.h" />

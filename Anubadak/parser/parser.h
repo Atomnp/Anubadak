@@ -14,7 +14,7 @@ namespace parser
 		Parser(lexer::Lexer* lex);
 		void consumeToken();
 		parser::ASTProgramNode* parse_program();
-		parser::ASTStatementNode* parseStatement();
+		parser::ASTNode* parseStatement();
 		parser::ASTDeclarationNode* parseDeclarationStatement();
 		parser::ASTAssignmentNode* parseAssignmentStatement();
 		parser::ASTPrintNode* parsePrintStatement();

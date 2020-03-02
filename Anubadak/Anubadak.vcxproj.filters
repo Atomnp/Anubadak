@@ -33,9 +33,6 @@
     <ClCompile Include="visitor\senamticAnalysis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="visitor\xmlVisitor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="visitor\interpreter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

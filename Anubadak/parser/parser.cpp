@@ -43,8 +43,10 @@ namespace parser
 		//rememnber that astprogramnode constructor uses std::move() to the statements argument
 		return new parser::ASTProgramNode(*statements);
 	}
-	ASTStatementNode* Parser::parseStatement() {
+	ASTNode* Parser::parseStatement() {
+
 		switch (_currentToken.type)
+		
 		{
 		case TOKEN::TOK_VAR:
 			return parseDeclarationStatement();
@@ -70,7 +72,23 @@ namespace parser
 		case TOKEN::TOK_DEF:
 			return parseFunctionDefinition();
 
+		case TOKEN::TOK_IDENTIFIER:
+			if (_nextToken.type == TOKEN::TOK_LEFT_BRACKET) {
+				auto x = parseFunctionCallExpr();
+				consumeToken();
+				if(_currentToken.type!=TOKEN::TOK_SEMICOLON)
+					throw std::runtime_error("invalid syntax missing semicolon "
+						+ std::to_string(_currentToken.getLineNumber()) + ".");
+				return x;
+			}
+
+			else
+				throw std::runtime_error("invalid syntax calling the function at line "
+					+ std::to_string(_currentToken.getLineNumber()) + ".");
+
 		default: {
+			if (DEBUG)
+				std::cout << "current token = "<<_currentToken.value<<std::endl;
 			throw std::runtime_error("invalid syntax at line may be you forgot set "
 				+ std::to_string(_currentToken.getLineNumber()) + ".");
 		}
@@ -194,7 +212,7 @@ namespace parser
 			_currentToken.type != TOKEN::TOK_ERROR and
 			_currentToken.type != TOKEN::TOK_EOF)
 		{
-			statements->push_back(parseStatement());
+			statements->push_back(dynamic_cast<ASTStatementNode*>(parseStatement()));
 			consumeToken();
 
 		}
@@ -600,7 +618,7 @@ namespace parser
 			
 		//checkPurpose
 		if (DEBUG)
-			std::cout << "curretn token =" << _currentToken.getVal()<<std::endl;
+			std::cout << "current token = in function call =" << _currentToken.getVal()<<std::endl;
 		
 		if (_currentToken.type != TOKEN::TOK_RIGHT_BRACKET) {
 			throw std::runtime_error("Expected ')' on line "
