@@ -1,0 +1,13 @@
+def fact(n:int):int
+{
+	if(n==0)
+	{
+		return 1;
+	}
+	else{
+		return n*fact(n-1);
+	}
+}
+var x: int=fact(7);
+print("aayuah"+"neupane");
+print(x);
