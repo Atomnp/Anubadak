@@ -3,5 +3,5 @@
 def add(x:real,y:int):real{
 	return x+y;
 }
-var x: real =add(5.0,6);
+var x: real =add(5.0,6)
 print(x);

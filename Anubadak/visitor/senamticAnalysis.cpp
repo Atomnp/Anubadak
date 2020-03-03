@@ -107,6 +107,12 @@ namespace visitor
 		}
 		_scopes.push_back(new SemanticScope());
 	}
+	SemanticAnalyser::SemanticAnalyser(SemanticScope* global_scope) {
+		// Add global scope
+		_scopes.push_back(global_scope);
+	}
+
+
 
 	void SemanticAnalyser::visit(parser::ASTProgramNode* progNode) {
 		for (auto statement : progNode->_statements) {

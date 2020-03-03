@@ -52,6 +52,10 @@ namespace visitor
 	public:
 		//constructor for semanticAnalyser
 		SemanticAnalyser();
+		SemanticAnalyser(SemanticScope* global_scope);
+
+
+
 
 		virtual  void visit(parser::ASTProgramNode*) override;
 		virtual  void visit(parser::ASTDeclarationNode*) override;
