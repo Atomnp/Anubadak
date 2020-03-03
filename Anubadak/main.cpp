@@ -10,8 +10,6 @@ int main()
 {
 
 
-	/*ifstream& file;
-	file.open("file.txt");*/
 
 	visitor::SemanticScope semanticGlobalScope;
 
@@ -35,7 +33,7 @@ int main()
 			std::cout << "Here are the guidelines for the command\n";
 
 			std::cout << "" << ">>> #load TO load the program\n\n";
-			std::cout << " #quit            Exits from the  REPL.\n\n";
+			std::cout << " #exit            Exits from the  REPL.\n\n";
 			std::cout << " #clear           Clears the terminal window." << std::endl;
 			std::cout << "OR simply start writing the code if u want to used REPL for interpreting ";
 		}
@@ -44,7 +42,7 @@ int main()
 		{
 			std::cout << std::string(50, '\n');
 		}
-		else if (input_line == "#quit")
+		else if (input_line == "#exit")
 		{
 			return 0;
 		}
