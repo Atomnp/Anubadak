@@ -6,7 +6,7 @@ case-sensitive, and every function is expected to return a value. There will be 
 int for integer values, real for ﬂoating point numbers, bool for Boolean values and string for string literals. 
 C++ will be used in backend to convert the provided input text file program to the native language  of the computers.
 
-# To Run this project(in Visual studio Code)
+# To Run this project(in Visual studio)
   * first you need to download required version of wxWidget from [Click here to download wxWidget](https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.3/wxWidgets-3.1.3.zip)
   * Now search for build/msw directory in the downloaded directory
   * Open your required version of visual studio solution for Visual Studio 2019 (wx_vc16.sln) then VS is opened.
